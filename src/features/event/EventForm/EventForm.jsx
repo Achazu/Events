@@ -1,15 +1,36 @@
 import React, {Component} from 'react';
 import { Button, Form, Segment } from 'semantic-ui-react';
 
+const emptyEvent = {
+	title: '',
+	date: '',
+	city: '',
+	venue: '',
+	hostedBy: ''
+}
 class EventForm extends Component {
 	
 	state = {
-		event: {
-			title: '',
-			date: '',
-			city: '',
-			venue: '',
-			hostedBy: ''
+		event: emptyEvent
+	}
+
+	componentDidMount(){
+		if(this.props.selectedEvent !== null){
+			this.setState({
+				event: this.props.selectedEvent
+			})
+		}
+	}
+
+	componentWillReceiveProps(nextProps){
+		console.log('current', this.props.selectedEvent);
+		console.log('next', nextProps);
+		console.log('next details', nextProps.selectedEvent);
+		if(nextProps.selectedEvent !== this.props.selectedEvent){
+			{/* Empty event because create event may be clicked and therefore no selected event will be present. if nextProps.selectedEvent===null then emptyEvent */}
+			this.setState({
+				event: nextProps.selectedEvent || emptyEvent
+			})
 		}
 	}
 
@@ -18,8 +39,13 @@ class EventForm extends Component {
 		// Refs are uncontrolled - legacy way of handlong forms/inputs
 		// console.log(this.refs.title.value); // and in input as below
 		// <input ref='title' placeholder="Event Title"/>
-		this.props.createEvent(this.state.event)
+		if(this.state.event.id){
+			this.props.updateEvent(this.state.event)
+		} else {
+			this.props.createEvent(this.state.event)
+		}
 	}
+	
 	onInputChange = (e) => {
 		const newEvent = this.state.event;
 		newEvent[e.target.name] = e.target.value;
