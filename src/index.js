@@ -33,3 +33,7 @@ if(module.hot) {
 render();
 
 serviceWorker.unregister();
+
+
+// google maps js key
+// AIzaSyBG5Z69WMRLNz5AJg5YhOkMcmrS8Ignve8
