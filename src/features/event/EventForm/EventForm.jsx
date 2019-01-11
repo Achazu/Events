@@ -92,17 +92,34 @@ class EventForm extends Component {
 			 })
 				 // redux form function to change particular field. Before that it was impossible to select cities in the form
 			 .then(() => {
-				 console.log(this.props)
+				console.log('dropdown', this.props)
 				 this.props.change('city', selectedCity)
 			 })
-			//  .catch(error => console.log('geocode ERROR'))
+			 .catch(error => console.log('geocode ERROR'))
 	 }
+
+	 handleVenueSelect = selectedVenue => {
+		geocodeByAddress(selectedVenue)
+			.then(results => getLatLng(results[0]))
+			.then(latlng => {
+				this.setState({
+					cityLatLng: latlng
+				});
+			})
+				// redux form function to change particular field. Before that it was impossible to select cities in the form
+			.then(() => {
+				console.log('dropdown', this.props)
+				this.props.change('venue', selectedVenue)
+			})
+			.catch(error => console.log('geocode ERROR'))
+	}
 
     onFormSubmit = values => {
 		 console.log(values);
 		 console.log(values.date);
 		 
 		 values.date = values.date.toISOString();
+		 values.venueLatLng = this.state.venueLatLng;
         // Refs are uncontrolled - legacy way of handlong forms/inputs
         // console.log(this.refs.title.value); // and in input as below <input
         // ref='title' placeholder="Event Title"/>
@@ -175,7 +192,8 @@ class EventForm extends Component {
 												radius: 1000,		
 												types: ['establishment'] 
 												}}
-											placeholder='Event Venue'/>
+											placeholder='Event Venue'
+											onSelect={this.handleVenueSelect}/>
 										}
 										  <Field 
 									 		name="date"

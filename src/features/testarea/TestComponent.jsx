@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Button } from 'semantic-ui-react'
+import { Button, Icon } from 'semantic-ui-react'
 import Script from 'react-load-script'
 import PlacesAutocomplete, {
 	geocodeByAddress,
 	getLatLng,
  } from 'react-places-autocomplete';
 import { incrementCounter, decrementCounter } from './testActions';
+import GoogleMapReact from 'google-map-react';
+
 // test matches to rootReducer.js
 const mapState = (state) => ({
 	data: state.test.data
@@ -18,8 +20,17 @@ const actions = {
 	decrementCounter
 }
 
+const Marker = () => <Icon name='marker' suze='big' color='red'/>
+
 class TestComponent extends Component {
-	
+	static defaultProps = {
+		center: {
+		  lat: 59.95,
+		  lng: 30.33
+		},
+		zoom: 11
+	 };s
+
 	state = { 
 		address: '',
 		scriptLoaded: false
@@ -87,7 +98,23 @@ class TestComponent extends Component {
 					>{renderFunc}</PlacesAutocomplete>}
 					<button type='submit'>Submit</button>
 				</form>
-
+				
+				
+				
+				<div style={{ height: '300px', width: '100%' }}>
+				
+				<GoogleMapReact
+				  bootstrapURLKeys={{ key:'AIzaSyBG5Z69WMRLNz5AJg5YhOkMcmrS8Ignve8'}}
+				  defaultCenter={this.props.center}
+				  defaultZoom={this.props.zoom}
+				>
+				  <Marker
+					 lat={59.955413}
+					 lng={30.337844}
+					 text="My Marker"
+				  />
+				</GoogleMapReact>
+			 </div>
 			</div>
 		);
 	}
