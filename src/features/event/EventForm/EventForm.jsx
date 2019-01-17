@@ -94,22 +94,26 @@ class EventForm extends Component {
 			 .then(() => {
 				console.log('dropdown', this.props)
 				 this.props.change('city', selectedCity)
+				 console.log('droptest', this.props.change('city', selectedCity))
 			 })
 			 .catch(error => console.log('geocode ERROR'))
 	 }
 
 	 handleVenueSelect = selectedVenue => {
 		geocodeByAddress(selectedVenue)
+		
 			.then(results => getLatLng(results[0]))
 			.then(latlng => {
+				console.log('then1')
 				this.setState({
-					cityLatLng: latlng
+					venueLatLng: latlng
 				});
 			})
-				// redux form function to change particular field. Before that it was impossible to select cities in the form
 			.then(() => {
-				console.log('dropdown', this.props)
+				console.log('then2')
 				this.props.change('venue', selectedVenue)
+				console.log('props', this.props);
+				
 			})
 			.catch(error => console.log('geocode ERROR'))
 	}
@@ -199,9 +203,9 @@ class EventForm extends Component {
 									 		name="date"
 									 		type="text"
 									 		component={DateInput}
-									 		// dateFormat='YYYY-MM-DD HH:mm'
+									 		dateFormat='YYYY-MM-DD HH:mm'
 									 		timeFormat='HH:mm'
-									 		showTimeSelect
+											 showTimeSelect
 									 		placeholder="Date and time of event"/>
 
                             <Button disabled={invalid || submitting || pristine} positive type="submit">
