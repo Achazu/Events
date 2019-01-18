@@ -97,7 +97,7 @@ class EventForm extends Component {
 			 .catch(error => console.log('geocode ERROR'))
 	 }
 
-	 handleVenueSelect = selectedVenue => {
+	 handleVenueSelect = (selectedVenue) => {
 		geocodeByAddress(selectedVenue)
 			.then(results => getLatLng(results[0]))
 			.then(latlng => {
