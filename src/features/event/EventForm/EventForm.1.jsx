@@ -70,7 +70,6 @@ const validate = combineValidators({
 		date: isRequired('date')
 })
 
-
 class EventForm extends Component {
 
 	 state = {
@@ -81,41 +80,46 @@ class EventForm extends Component {
 
 	 handleScriptLoaded = () => {
 		this.setState({ scriptLoaded: true });
-	 };
-	 
+    };
+
 	 handleCitySelect = selectedCity => {
-		geocodeByAddress(selectedCity)
+		 geocodeByAddress(selectedCity)
+			 .then(results => getLatLng(results[0]))
+			 .then(latlng => {
+				 this.setState({
+				 	cityLatLng: latlng
+				 });
+			 })
+				 // redux form function to change particular field. Before that it was impossible to select cities in the form
+			 .then(() => {
+				 this.props.change('city', selectedCity)
+			 })
+			 .catch(error => console.log('geocode ERROR'))
+	 }
+
+	 handleVenueSelect = (selectedVenue) => {
+		geocodeByAddress(selectedVenue)
 			.then(results => getLatLng(results[0]))
 			.then(latlng => {
 				this.setState({
-					cityLatLng: latlng
+					venueLatLng: latlng
 				});
 			})
-			.catch(error => console.log('geocode ERROR city'))
+			.then(() => {
+				this.props.change("venue", selectedVenue)
+			})
+			.catch(error => console.log('geocode ERROR'))
 	}
 
-	handleVenueSelect = (selectedVenue) => {
-	  geocodeByAddress(selectedVenue)
-		  .then(results => getLatLng(results[0]))
-		  .then(latlng => {
-			  this.setState({
-				  venueLatLng: latlng
-			  });
-		  })
-		  .catch(error => console.log('geocode ERROR venue'))
-  }
+
+
 
     onFormSubmit = values => {
+		 console.log(values);
+		 console.log(values.date);
+		 
 		 values.date = values.date.toISOString();
 		 values.venueLatLng = this.state.venueLatLng;
-		 values.city = values.city.name.toString()
-		 values.venue = values.venue.name.toString()
-		 console.log(values.city);
-		 console.log(values.venue);
-		 
-		//  values.city = JSON.stringify(values.city.name)
-		//  values.venue = JSON.stringify(values.venue.name)
-		 
         // Refs are uncontrolled - legacy way of handlong forms/inputs
         // console.log(this.refs.title.value); // and in input as below <input
         // ref='title' placeholder="Event Title"/>
@@ -175,10 +179,9 @@ class EventForm extends Component {
 										  name='city' 
 										  type='text' 
 										  component={PlaceInput} 
+										  onSelect={this.handleCitySelect} 
 										  options={{types: ['(cities)']}} 
-										  placeholder='Event City'
-										  onSelect={this.handleCitySelect}
-										  />
+										  placeholder='Event City'/>
 									 {this.state.scriptLoaded &&
 										<Field
 											name='venue'
@@ -204,7 +207,7 @@ class EventForm extends Component {
 
                             <Button disabled={invalid || submitting || pristine} positive type="submit">
                                 Submit
-									</Button>
+                            </Button>
                             <Button onClick={this.props.history.goBack} type="button">Cancel</Button>
                         </Form>
                     </Segment>

@@ -8,14 +8,13 @@ import PlacesAutocomplete, {
 
 const styles = {
 	autocompleteContainer: {
-		// zIndex: 1000
+		zIndex: 1000
 	}
 }
 
 class PlaceInput extends Component {
 	
 	state = {
-		address: '',
 		scriptLoaded: false 
 	}
 	handleScriptCreate = () => {
@@ -29,41 +28,20 @@ class PlaceInput extends Component {
    handleScriptLoaded = () => {
 		this.setState({ scriptLoaded: true });
    };
-  
-   handleChange = (address) => {
-		console.log('address',address)
-		this.setState({ address });
-   };
 	
-	render() {
-		const {input, width, onSelect, placeholder, options, meta: {touched, error}} = this.props
+	handleChange = address => {
+		this.props.input.onChange({ name: address });
+	 };
 
-		const renderFunc = ({ getInputProps, suggestions, getSuggestionItemProps }) => (
-			<div>
-				 <input
-					  {...getInputProps({
-						placeholder
-					  })}
-				  />
-				  
-				<Segment.Group suggestions={suggestions}>
-						{suggestions.map((suggestion) => (
-					// 		{
-					// 		const className = suggestion.active
-               //    ? 'suggestion-item--active'
-               //    : 'suggestion-item';
-               //  // inline style for demonstration purpose
-               //  const style = suggestion.active
-               //    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-					// 	: { backgroundColor: '#ffffff', cursor: 'pointer' };
-					// }
-					<Segment {...getSuggestionItemProps(suggestion)}>
-						{suggestion.description}
-						</Segment>
-				))}
-				</Segment.Group>
-			</div>
-	  )
+	 handleSelect = address => {
+		this.props.input.onChange({ name: address });
+		this.props.onSelect(address)
+	 };
+
+	render() {
+		const {input, width, placeholder, options, meta: {touched, error}} = this.props
+		console.log('XXXXX', this.props)	
+		const { input: { value }} = this.props;
 
 		return (
 			<Form.Field error={touched && !!error}>
@@ -75,9 +53,9 @@ class PlaceInput extends Component {
 				<PlacesAutocomplete
 					inputProps={{...input, placeholder}}
 					searchOptions={options}
-					value={this.state.address}
+					value={value ? value.name : ''}
 					onChange={this.handleChange}
-					onSelect={onSelect}
+					onSelect={this.handleSelect}
 					styles={styles}
 					>
 					{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -112,7 +90,6 @@ class PlaceInput extends Component {
 						  </div>
 						</div>
 					 )}
-						{/*{renderFunc}*/}
 						
 				</PlacesAutocomplete>}
 				{touched && error && <Label basic color='red'>{error}</Label>}
