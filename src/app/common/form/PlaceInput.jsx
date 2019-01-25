@@ -40,7 +40,6 @@ class PlaceInput extends Component {
 
 	render() {
 		const {input, width, placeholder, options, meta: {touched, error}} = this.props
-		console.log('XXXXX', this.props)	
 		const { input: { value }} = this.props;
 
 		return (
