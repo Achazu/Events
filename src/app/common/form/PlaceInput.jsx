@@ -41,7 +41,8 @@ class PlaceInput extends Component {
 	render() {
 		const {input, width, placeholder, options, meta: {touched, error}} = this.props
 		const { input: { value }} = this.props;
-
+		// console.log('THIS PROPS', this.props)
+		// console.log('value?', value)
 		return (
 			<Form.Field error={touched && !!error}>
 				<Script
@@ -52,7 +53,8 @@ class PlaceInput extends Component {
 				<PlacesAutocomplete
 					inputProps={{...input, placeholder}}
 					searchOptions={options}
-					value={value ? value.name : ''}
+					value={value ? value.name || value : ''}
+					// value={value ? value : ''}
 					onChange={this.handleChange}
 					onSelect={this.handleSelect}
 					styles={styles}
