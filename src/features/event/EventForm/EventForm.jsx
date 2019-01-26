@@ -106,15 +106,18 @@ class EventForm extends Component {
   }
 
     onFormSubmit = values => {
-		 if (typeof(values.city) !== 'string'){ 
-		 console.log('values', values)
-		 values.date = values.date.toISOString();
-		console.log('values date', values.date)
-		console.log('values date', typeof(values.date))
-		 values.venueLatLng = this.state.venueLatLng;
+		values.venueLatLng = this.state.venueLatLng;
+
+		if (typeof(values.city) !== 'string'){ 
 		 values.city = values.city.name.toString()
-		 values.venue = values.venue.name.toString()
 		}
+		if (typeof(values.venue) !== 'string'){ 
+			values.venue = values.venue.name.toString()
+		}
+		if (typeof(values.date) !== 'string'){
+			values.date = values.date.toISOString();
+		} 
+		
 		//  values.city = JSON.stringify(values.city.name)
 		//  values.venue = JSON.stringify(values.venue.name)
 		 

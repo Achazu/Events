@@ -6,6 +6,7 @@ import EventList from '../EventList/EventList';
 import EventForm from '../EventForm/EventForm';
 import { createEvent, deleteEvent, updateEvent } from '../eventActions'
 import LoadingComponent from "../../../app/layouts/LoadingComponent";
+import EventActivity from "../EventActivity/EventActivity"
 
 const mapState = (state) => ({
 	events: state.events,
@@ -31,6 +32,7 @@ class EventDashboard extends Component {
 					<EventList deleteEvent={this.handleDeleteEvent} events={events}/>
 				</Grid.Column>
 				<Grid.Column width={6}>
+					<EventActivity/>
 				</Grid.Column>
 			</Grid>
 		);
